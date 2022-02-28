@@ -86,7 +86,8 @@ userSchema.statics.authenticate = function (username, password, callback) {
         }
 
         // generate and save token
-        user.token = createToken(username);
+        user.token = createToken({username: user.username, _id: user._id});
+        if (!user.token) { return callback(new Error('Error generating token')) }
         user.save().then(user => {return callback(null, user)} )
       })
     })

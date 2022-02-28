@@ -1,29 +1,25 @@
 const express = require('express');
 const User = require('../models/user');
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 const {verifyToken, createToken} = require('../helpers/token');
 
 router.post('/login', (req, res) => {
-  username = req.body.username || res.send({ error: 'Please enter a username' });
-  password = req.body.password || res.send({ error: 'Please enter a password' });
+  if (!req.body.username || !req.body.password) {
+    return res.error('username and password are required');
+  }
+
+  let {username, password} = req.body;
   User.authenticate(username, password, function(err, user) {
-    if(err) {
-      res.json({
-        status: 'error',
-        message: err.message
-      })
-    } else {
-      res.json({
-        status: 'success',
-        message: 'User logged in',
-        user: user
-      })
+    if (err) {
+      return res.error('Error authenticating user',400, err);
     }
+    return res.success(user)
   })
 })
 
 router.post('/signup', (req, res) => {
   // const token = createToken(req.body.username);
+  // token is automatically created in the Mongo User Schema when user is created
   const user = new User({
     username: req.body.username,
     password: req.body.password,

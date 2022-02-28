@@ -52,6 +52,11 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+eventSchema.pre('updateOne', function(next) {
+  this.options.runValidators = true;
+  next();
+})
+
 // eventSchema.pre('save', async function(next){
 //   const event = this;
 //   if(event.isModified('location')) {

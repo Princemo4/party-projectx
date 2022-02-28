@@ -1,9 +1,10 @@
 const JWT = require('jsonwebtoken');
 require('dotenv').config();
 
-function createToken(username) {
+function createToken(user = {}) {
+  if (!user.username || !user._id) { return false}
   token = JWT.sign( 
-    { username: username }, process.env.TOKEN_KEY, { expiresIn: '2h' }
+    { user}, process.env.TOKEN_KEY, { expiresIn: '2h' }
   )
   return token;
 }

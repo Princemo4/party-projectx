@@ -9,7 +9,10 @@ async function validateToken(req, res, next) {
 
   try {
     decodedToken = await verifyToken(token)
-    res.locals.username = decodedToken.username;
+    if (!decodedToken) { return res.error('Error decoding token.', 401, null); }
+    console.log('decodedToken:', decodedToken)
+    res.locals.username = decodedToken.user.username;
+    res.locals.userId = decodedToken.user._id;
     next();
   } catch (err) {
     return res.error('Invalid token.', 401, null);
