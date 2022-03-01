@@ -46,6 +46,10 @@ const userSchema = new Schema({
   attendingEvents: {
     type: [Schema.Types.ObjectId],
     ref: 'Event'
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 })
 

@@ -18,7 +18,7 @@ mongoose.connect(MONGODB_URI, {
 }).catch((error) => {console.log(error)});
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true}));
 app.use(REST_response())
 
 const Authentication = require('./routes/authentication');
@@ -38,6 +38,14 @@ app.use('/api/user', User);
 app.use('/_health', (req,res) => {
   res.status(200).send('OK')
 })
+
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      console.error(err);
+      return res.status(400).send({ error: true, code: 400, message: err.message }); // Bad request
+  }
+  next();
+});
 
 app.use('*', Auth, function(req, res, next) {
   res.success('Hello World!');
