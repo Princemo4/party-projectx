@@ -9,22 +9,26 @@ router.post('/', Auth, async function (req, res) {
   const event = await Event.findOne({_id: req.params.eventId});
   User.findOne({ username: res.locals.username}).populate('attendingEvents')
     .then(async user => {
-      console.log('current: ' , event)
-      user.attendingEvents.forEach(attendingEvent => {
-        console.log(attendingEvent === event)
-      })
-      // if (user.attendingEvents.includes(event)) {
-      //   return res.error('You are already attending this event', 401, null);
-      // }
-      // user.attendingEvents.push(event);
+      // console.log('current: ' , event)
+      // user.attendingEvents.forEach(attendingEvent => {
+      //   console.log(attendingEvent === event)
+      // })
+      if (user.attendingEvents.includes(event)) {
+        return res.error('You are already attending this event', 401, null);
+      }
+      user.attendingEvents.push(event);
       
-      // if (event.attendees.includes(user)) {
-      //   return res.error('You are already attending this event', 401, null);
-      // }
-      // event.attendees.push(user);
-      // await user.save();
-      // await event.save();
-      res.send(user)
+      if (event.attendees.includes(user)) {
+        return res.error('You are already attending this event', 401, null);
+      }
+      attendee = {
+        user: user._id,
+        plusOne: req.body.plusOne
+      }
+      event.attendees.push(attendee);
+      await user.save();
+      await event.save();
+      res.success(true)
     })
     .catch(err => res.send(err))
 })

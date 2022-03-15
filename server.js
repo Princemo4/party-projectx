@@ -20,6 +20,7 @@ mongoose.connect(MONGODB_URI, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(REST_response())
+app.use(cors());
 
 const Authentication = require('./routes/authentication');
 const Events = require('./routes/event/index');

@@ -26,7 +26,6 @@ router.get('/:eventId', async function (req, res) {
   if (!event) {
     return res.error('Event not found', 404,null)
   }
-
   res.success(event)
 })
 

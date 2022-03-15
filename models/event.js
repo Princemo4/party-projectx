@@ -2,6 +2,17 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+const attendeeSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  guests: {
+    type: Number,
+    default: 0,
+  },
+})
+
 const eventSchema = new Schema({
   name: {
     type: String,
@@ -30,8 +41,7 @@ const eventSchema = new Schema({
     ref: 'User'
   },
   attendees: {
-    type: [Schema.Types.ObjectId],
-    ref: 'User'
+    type: [attendeeSchema]
   },
   price: {
     type: Number,

@@ -1,0 +1,678 @@
+{
+	"info": {
+		"_postman_id": "db6515f0-c80b-4e26-9460-79a19059b3f4",
+		"name": "TurntUp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test(\"Mongo user _id in the body response JSON\", function () {",
+									"    response = pm.response.json().data",
+									"    pm.expect(response._id).to.be.not.empty",
+									"    pm.collectionVariables.set(\"newUser\", response._id)",
+									"    pm.collectionVariables.set(\"newUserName\", response.username)",
+									"    pm.collectionVariables.set(\"newUserEmail\", response.email)",
+									"    pm.collectionVariables.set(\"token\", response.token)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{$randomUserName}}\",\n    \"password\": \"password\",\n    \"email\": \"{{$randomEmail}}\",\n    \"firstName\": \"{{$randomFirstName}}\",\n    \"lastName\": \"{{$randomLastName}}\",\n    \"phone\": \"{{$randomPhoneNumber}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/authentication/signup",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"authentication",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful LOGIN request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201, 202]);",
+									"});",
+									"",
+									"pm.test(\"Get token at login\", function () {",
+									"    response = pm.response.json().data;",
+									"    pm.expect(response.token).to.not.be.empty;",
+									"    pm.collectionVariables.set(\"x-access-token\", response.token)",
+									"    pm.request.headers.upsert({key: 'x-access-token', value: response.token})",
+									"})",
+									"",
+									"pm.test(\"Response should not include password field\", function() {",
+									"    respons = pm.response.json().data;",
+									"    pm.expect(response).to.not.have.property(\"password\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{newUserName}}\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/authentication/login",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"authentication",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "my events",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/user/{{newUserName}}/my_events",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{newUserName}}",
+								"my_events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/user/{{newUserName}}/my_events",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{newUserName}}",
+								"my_events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/user/{{newUserName}}/my_events",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{newUserName}}",
+								"my_events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deactivate user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/user/{{newUserName}}/deactivate",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{newUserName}}",
+								"deactivate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activate user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/user/{{newUserName}}/activate",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{newUserName}}",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "get all events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Get status 200', function() {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test('Get proper response format', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.exist;",
+									"    pm.expect(response.data).to.exist;",
+									"",
+									"    pm.collectionVariables.set(\"eventId\", response.data[0]._id);",
+									"})",
+									"",
+									"pm.test('error should be false', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.be.false;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/events/",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"events",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Get status 200', function() {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test('Get proper response format', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.exist;",
+									"    pm.expect(response.data).to.exist;",
+									"})",
+									"",
+									"pm.test('error should be false', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.be.false;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"61f1a83026efbf17f44eab50\",\n        \"name\": \"first event\",\n        \"description\": \"event description here\",\n        \"date\": \"2022-01-26T19:59:44.069Z\",\n        \"location\": \"New York, NY\",\n        \"organizer\": \"61f15ce81d19843d09975a90\",\n        \"price\": 1.99,\n        \"active\": true,\n        \"zipcode\": \"10888\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/events/{{eventId}}/edit",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"{{eventId}}",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Get status 200', function() {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test('Get proper response format', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.exist;",
+									"    pm.expect(response.data).to.exist;",
+									"})",
+									"",
+									"pm.test('error should be false', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.be.false;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"61f1a83026efbf17f44eab50\",\n        \"name\": \"first event\",\n        \"description\": \"event description here\",\n        \"date\": \"2022-01-26T19:59:44.069Z\",\n        \"location\": \"New York, NY\",\n        \"organizer\": \"61f15ce81d19843d09975a90\",\n        \"price\": 1.99,\n        \"active\": true,\n        \"zipcode\": \"10888\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/events/{{eventId}}/edit",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"{{eventId}}",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "attend event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Get status 200', function() {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test('Get proper response format', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.exist;",
+									"    pm.expect(response.data).to.exist;",
+									"})",
+									"",
+									"pm.test('error should be false', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.be.false;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"61f1a83026efbf17f44eab50\",\n        \"name\": \"first event\",\n        \"description\": \"event description here\",\n        \"date\": \"2022-01-26T19:59:44.069Z\",\n        \"location\": \"New York, NY\",\n        \"organizer\": \"61f15ce81d19843d09975a90\",\n        \"price\": 1.99,\n        \"active\": true,\n        \"zipcode\": \"10888\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/events/{{eventId}}/attend",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"{{eventId}}",
+								"attend"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Get status 200', function() {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test('Get proper response format', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.exist;",
+									"    pm.expect(response.data).to.exist;",
+									"",
+									"    pm.collectionVariables.set(\"eventId\", response.data._id);",
+									"})",
+									"",
+									"pm.test('error should be false', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.be.false;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let dateOfEvent = new Date(Date.now() + (1000*60*60*24*10))",
+									"pm.environment.set(\"dateOfEvent\", dateOfEvent);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"{{$randomCompanyName}}\",\n        \"description\": \"{{$randomLoremSentence}}\",\n        \"date\": \"{{dateOfEvent}}\",\n        \"location\": \"New York, NY\",\n        \"price\": 1.99,\n        \"zipcode\": \"10888\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/events/create",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "single event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Get status 200', function() {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test('Get proper response format', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.exist;",
+									"    pm.expect(response.data).to.exist;",
+									"})",
+									"",
+									"pm.test('error should be false', function() {",
+									"    response = pm.response.json();",
+									"    pm.expect(response.error).to.be.false;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_URL}}/api/events/{{eventId}}",
+							"host": [
+								"{{HOST_URL}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"{{eventId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"xAccessToken = pm.collectionVariables.get(\"x-access-token\");",
+					"",
+					"if (xAccessToken) {",
+					"    pm.request.headers.add({key: 'x-access-token', value: xAccessToken})",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "HOST_URL",
+			"value": "http://localhost:3737"
+		},
+		{
+			"key": "newUser",
+			"value": ""
+		},
+		{
+			"key": "newUserName",
+			"value": ""
+		},
+		{
+			"key": "newUserEmail",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "x-access-token",
+			"value": ""
+		},
+		{
+			"key": "eventId",
+			"value": ""
+		}
+	]
+}
